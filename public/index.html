@@ -61,7 +61,7 @@ h1,h2,h3{margin:0;font-stretch:75%;font-weight:800;text-wrap:balance}
 .scrim{position:absolute;inset:0}
 .hero .scrim,.final .scrim{background:linear-gradient(100deg,rgba(78,56,140,.9) 0%,rgba(47,99,168,.86) 48%,rgba(56,164,212,.5) 78%,rgba(46,158,107,.4) 100%)}
 .hero h1,.hero__sub,.final__copy h2,.final__copy p{text-shadow:0 1px 18px rgba(30,24,70,.35)}
-.hero__grid{position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,440px);grid-template-areas:"copy form";column-gap:clamp(32px,4vw,56px);align-items:start;padding-block:clamp(36px,5vw,72px)}
+.hero__grid{position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,440px);grid-template-areas:"copy form" "video form";grid-template-rows:auto 1fr;column-gap:clamp(32px,4vw,56px);align-items:start;padding-block:clamp(36px,5vw,72px)}
 .hero__copy{grid-area:copy;min-width:0;padding-top:8px}
 .hero h1{font-size:clamp(38px,4.6vw,64px);line-height:1.02;letter-spacing:-.005em;color:#FFFFFF}
 .hero__sub{margin:20px 0 0;max-width:34em;font-size:clamp(17px,1.45vw,20px);line-height:1.55;color:#F1F4FB}
@@ -75,7 +75,7 @@ h1,h2,h3{margin:0;font-stretch:75%;font-weight:800;text-wrap:balance}
 .proof__label{margin-top:6px;font-size:14px;line-height:1.4;color:#E6EBF7}
 
 /* Video */
-.video{position:relative;margin-top:28px;max-width:640px;aspect-ratio:16/9;border-radius:14px;overflow:hidden;background:#0B1220;box-shadow:0 18px 44px rgba(8,14,28,.45)}
+.video{grid-area:video;position:relative;margin-top:28px;max-width:640px;aspect-ratio:16/9;border-radius:14px;overflow:hidden;background:#0B1220;box-shadow:0 18px 44px rgba(8,14,28,.45)}
 .video__btn{position:absolute;inset:0;display:block;color:#FFFFFF;text-decoration:none}
 .video__btn img{width:100%;height:100%;object-fit:cover;transition:transform .4s ease}
 .video__btn:hover img{transform:scale(1.03)}
@@ -98,6 +98,7 @@ h1,h2,h3{margin:0;font-stretch:75%;font-weight:800;text-wrap:balance}
 .error{margin:0;font-size:13px;line-height:1.4;color:var(--error)}
 .choice{margin:0;padding:0;border:0;min-width:0}
 .choice legend{padding:0;margin:0 0 6px}
+.choice__hint{font-weight:400;color:var(--muted)}
 .choice__row{display:flex;gap:8px}
 .choice__row button{flex:1 1 0;min-width:0;height:46px;border-radius:10px;border:1.5px solid var(--field);background:#FFFFFF;color:var(--navy);font-family:inherit;font-size:16px;font-weight:700;cursor:pointer}
 .choice__row button[aria-pressed="true"]{background:var(--purple);border-color:var(--purple);color:#FFFFFF}
@@ -154,7 +155,7 @@ h1,h2,h3{margin:0;font-stretch:75%;font-weight:800;text-wrap:balance}
 .stars{letter-spacing:3px;color:var(--star)}
 .reviews__count .stars{font-size:22px}
 .reviews__grid{margin-top:clamp(28px,3vw,40px);display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
-.review{margin:0;min-width:0;display:flex;flex-direction:column;gap:14px;padding:26px;border:1.5px dashed #CBB492;border-radius:14px;background:#FBF8F3}
+.review{margin:0;min-width:0;display:flex;flex-direction:column;gap:14px;padding:26px;border:1px solid var(--sand-line);border-radius:14px;background:#FBF8F3}
 .review .stars{font-size:18px}
 .review blockquote{margin:0;color:var(--ink-2)}
 .review figcaption{margin-top:auto;font-size:14px;line-height:1.5;color:var(--slate)}
@@ -181,7 +182,18 @@ h1,h2,h3{margin:0;font-stretch:75%;font-weight:800;text-wrap:balance}
 .sticky{display:none}
 
 @media (max-width:900px){
-  .hero__grid{grid-template-columns:minmax(0,1fr);grid-template-areas:"copy" "form";row-gap:28px}
+  .hero__grid{grid-template-columns:minmax(0,1fr);grid-template-areas:"copy" "form" "video";grid-template-rows:auto;row-gap:28px}
+  .video{margin-top:0}
+}
+@media (max-width:600px){
+  /* Phones: tighter hero so the form starts above the fold. */
+  .hero__grid{padding-block:22px 32px;row-gap:22px}
+  .hero .eyebrow{margin-bottom:10px}
+  .proof{margin-top:16px;padding-block:14px;gap:12px 24px}
+  .proof__num{font-size:28px}
+  .proof__big{font-size:18px}
+  .proof__label{margin-top:4px;font-size:13px}
+  .hero__sub{margin-top:14px;font-size:16px}
   .cards,.reviews__grid{grid-template-columns:minmax(0,1fr)}
 }
 @media (max-width:860px){
@@ -244,13 +256,6 @@ h1,h2,h3{margin:0;font-stretch:75%;font-weight:800;text-wrap:balance}
   } catch (e) {}
 })();
 </script>
-<div class="video" data-video="eWZOX72oonU">
-<a class="video__btn" href="https://www.youtube.com/watch?v=eWZOX72oonU" aria-label="Play video: Go With the Best Realtors in Lakewood Ranch">
-<img src="https://i.ytimg.com/vi/eWZOX72oonU/maxresdefault.jpg" srcset="https://i.ytimg.com/vi/eWZOX72oonU/hqdefault.jpg 480w, https://i.ytimg.com/vi/eWZOX72oonU/maxresdefault.jpg 1280w" sizes="(max-width: 900px) 92vw, 640px" width="1280" height="720" alt="">
-<span class="video__play" aria-hidden="true"><svg width="28" height="28" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z" fill="#FFFFFF"></path></svg></span>
-<span class="video__label">Watch the video</span>
-</a>
-</div>
 </div>
 
 
@@ -275,7 +280,7 @@ h1,h2,h3{margin:0;font-stretch:75%;font-weight:800;text-wrap:balance}
 <p class="error" id="a-email-err" data-error="email" role="alert" hidden></p>
 </div>
 <fieldset class="choice">
-<legend>I want to</legend>
+<legend>I want to <span class="choice__hint">(pick any)</span></legend>
 <div class="choice__row">
 <button type="button" data-choice="Buy" aria-pressed="false">Buy</button>
 <button type="button" data-choice="Build" aria-pressed="false">Build</button>
@@ -299,6 +304,13 @@ h1,h2,h3{margin:0;font-stretch:75%;font-weight:800;text-wrap:balance}
 </div>
 </div>
 
+<div class="video" data-video="eWZOX72oonU">
+<a class="video__btn" href="https://www.youtube.com/watch?v=eWZOX72oonU" aria-label="Play video: Go With the Best Realtors in Lakewood Ranch">
+<img src="https://i.ytimg.com/vi/eWZOX72oonU/maxresdefault.jpg" srcset="https://i.ytimg.com/vi/eWZOX72oonU/hqdefault.jpg 480w, https://i.ytimg.com/vi/eWZOX72oonU/maxresdefault.jpg 1280w" sizes="(max-width: 900px) 92vw, 640px" width="1280" height="720" alt="">
+<span class="video__play" aria-hidden="true"><svg width="28" height="28" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z" fill="#FFFFFF"></path></svg></span>
+<span class="video__label">Watch the video</span>
+</a>
+</div>
 </div>
 </section>
 
@@ -332,6 +344,35 @@ h1,h2,h3{margin:0;font-stretch:75%;font-weight:800;text-wrap:balance}
 <p>Builder vs. builder. Building new vs. buying a home that was built recently. You get the full picture before you decide.</p>
 </article>
 </div>
+</div>
+</section>
+
+<section class="build section" aria-labelledby="build-title">
+<div class="wrap">
+<div class="build__intro">
+<p class="eyebrow">Building new?</p>
+<h2 id="build-title">The builder pays our commission.</h2>
+<p>So you get an expert on your side to compare builders and homes, at no cost to you.</p>
+<a class="btn" href="#get-started">Get Help With My Build</a>
+</div>
+<dl class="faq">
+<div>
+<dt>Can I use an agent if I want to build?</dt>
+<dd>Yes. The builder pays our commission, so you get expert help at no cost to you.</dd>
+</div>
+<div>
+<dt>Will using an agent raise my price?</dt>
+<dd>No. Every builder has an established agent program. Using us does not change your price or your negotiation.</dd>
+</div>
+<div>
+<dt>Do I need to bring you to my first builder visit?</dt>
+<dd>In most cases, yes. Many builders ask that your agent register you at your first visit. Reach out before you tour model homes.</dd>
+</div>
+<div>
+<dt>What if I buy a resale home instead?</dt>
+<dd>You pay nothing up front. Our fee is handled at closing.</dd>
+</div>
+</dl>
 </div>
 </section>
 
@@ -395,35 +436,6 @@ h1,h2,h3{margin:0;font-stretch:75%;font-weight:800;text-wrap:balance}
 </div>
 </section>
 
-<section class="build section" aria-labelledby="build-title">
-<div class="wrap">
-<div class="build__intro">
-<p class="eyebrow">Building new?</p>
-<h2 id="build-title">The builder pays our commission.</h2>
-<p>So you get an expert on your side to compare builders and homes, at no cost to you.</p>
-<a class="btn" href="#get-started">Get Help With My Build</a>
-</div>
-<dl class="faq">
-<div>
-<dt>Can I use an agent if I want to build?</dt>
-<dd>Yes. The builder pays our commission, so you get expert help at no cost to you.</dd>
-</div>
-<div>
-<dt>Will using an agent raise my price?</dt>
-<dd>No. Every builder has an established agent program. Using us does not change your price or your negotiation.</dd>
-</div>
-<div>
-<dt>Do I need to bring you to my first builder visit?</dt>
-<dd>In most cases, yes. Many builders ask that your agent register you at your first visit. Reach out before you tour model homes.</dd>
-</div>
-<div>
-<dt>What if I buy a resale home instead?</dt>
-<dd>You pay nothing up front. Our fee is handled at closing.</dd>
-</div>
-</dl>
-</div>
-</section>
-
 <section class="reviews section" aria-labelledby="reviews-title">
 <div class="wrap">
 <div class="reviews__head">
@@ -436,18 +448,33 @@ h1,h2,h3{margin:0;font-stretch:75%;font-weight:800;text-wrap:balance}
 <div class="reviews__grid">
 <figure class="review">
 <div class="stars" aria-hidden="true">★★★★★</div>
-<blockquote>[Paste a real Google review here. Pick one about how well we know the area.]</blockquote>
-<figcaption><strong>[Reviewer name]</strong> · Google review</figcaption>
+<blockquote>I've been a Realtor in Virginia for 25 years so I was definitely looking for an amazing agent for my relocation to Florida. I Found one!!! Sasha was very knowledgeable, caring, and attentive! I couldn't have asked for better Realtor!</blockquote>
+<figcaption><strong>Louann Hook</strong> · Google review</figcaption>
 </figure>
 <figure class="review">
 <div class="stars" aria-hidden="true">★★★★★</div>
-<blockquote>[Paste a real Google review here. Pick one about help with a new build.]</blockquote>
-<figcaption><strong>[Reviewer name]</strong> · Google review</figcaption>
+<blockquote>I had the BEST experience with Justin Tarica!! Moving from Nj to FL was extremely stressful. He was our ears and eyes and took such great care of us. Always knowledgeable and always available. I would recommend him to anyone. It made a world of difference negotiating on our new build with someone so confident and experienced. We made out and couldn’t be any happier thanks to him!</blockquote>
+<figcaption><strong>Jenna Lawson</strong> · Google review</figcaption>
 </figure>
 <figure class="review">
 <div class="stars" aria-hidden="true">★★★★★</div>
-<blockquote>[Paste a real Google review here. Pick one about an easy, low-stress process.]</blockquote>
-<figcaption><strong>[Reviewer name]</strong> · Google review</figcaption>
+<blockquote>I'd give Natalie 500 stars if I could. She showed us possible homes for OVER A YEAR without once losing her patience with us and our "particular" needs. When we finally decided to give it a go, she put together an offer within a day, on a weekend, which arrived (and was accepted) ahead of the second offer by literally hours (or minutes). It didn't end there. We were not on location during the contract process, but she took care of every in-person need we had, right up to the closing, including the walk through. The bottom line is we would not be living in Florida today if it weren't for Natalie Pankonin.</blockquote>
+<figcaption><strong>Yank Poleyeff</strong> · Google review</figcaption>
+</figure>
+<figure class="review">
+<div class="stars" aria-hidden="true">★★★★★</div>
+<blockquote>Working with Natalie Pankonin was an absolutely wonderful experience. She understood exactly what we wanted in a second home — not just the features, but the feeling we were hoping for. Natalie consistently went above and beyond, stepping in for on‑site milestones whenever we couldn’t be there, and we always felt fully informed and supported. Her professionalism, patience, and genuine kindness made the entire process smooth and enjoyable. We couldn’t have asked for a better partner in finding our home.</blockquote>
+<figcaption><strong>Tim Lee</strong> · Google review</figcaption>
+</figure>
+<figure class="review">
+<div class="stars" aria-hidden="true">★★★★★</div>
+<blockquote>Sasha was awesome to work with. From our first inquiry about possibly buying a home in Lakewood Ranch, she was incredibly helpful and so very patient. Our first home tours were in March 2025 and we didn’t purchase until April 2026. She respected our timeline. She worked with us every step of the way to be sure we found the perfect home away from home. I highly recommend Sasha to help with your home-buying needs!!</blockquote>
+<figcaption><strong>Julie Zuleger</strong> · Google review</figcaption>
+</figure>
+<figure class="review">
+<div class="stars" aria-hidden="true">★★★★★</div>
+<blockquote>My home-buying process was simply amazing. Lynn’s attention to detail, patience, and local market knowledge made me feel completely at ease. I would gladly recommend Lynn Brown to potential customers looking for a transparent and trusting relationship with their realtor.</blockquote>
+<figcaption><strong>George Mikaiel</strong> · Google review</figcaption>
 </figure>
 </div>
 </div>
@@ -485,7 +512,7 @@ h1,h2,h3{margin:0;font-stretch:75%;font-weight:800;text-wrap:balance}
 <p class="error" id="b-email-err" data-error="email" role="alert" hidden></p>
 </div>
 <fieldset class="choice">
-<legend>I want to</legend>
+<legend>I want to <span class="choice__hint">(pick any)</span></legend>
 <div class="choice__row">
 <button type="button" data-choice="Buy" aria-pressed="false">Buy</button>
 <button type="button" data-choice="Build" aria-pressed="false">Build</button>
@@ -589,12 +616,20 @@ h1,h2,h3{margin:0;font-stretch:75%;font-weight:800;text-wrap:balance}
     });
   }
 
-  function showThanks(firstName, pick, fromCard) {
+  // ['Buy', 'Sell'] -> 'your home search and selling your home'
+  function describe(picks) {
+    var parts = picks.map(function (p) { return ABOUT[p]; }).filter(Boolean);
+    if (!parts.length) return 'your plans';
+    if (parts.length === 1) return parts[0];
+    return parts.slice(0, -1).join(', ') + ' and ' + parts[parts.length - 1];
+  }
+
+  function showThanks(firstName, picks, fromCard) {
     cards.forEach(function (card) {
       card.querySelector('[data-form-body]').hidden = true;
       var thanks = card.querySelector('[data-thanks]');
       thanks.querySelector('[data-first-name]').textContent = firstName;
-      thanks.querySelector('[data-about]').textContent = ABOUT[pick] || 'your plans';
+      thanks.querySelector('[data-about]').textContent = describe(picks);
       var note = thanks.querySelector('[data-test-note]');
       if (note) note.hidden = !!LEAD_ENDPOINT;
       thanks.hidden = false;
@@ -605,12 +640,15 @@ h1,h2,h3{margin:0;font-stretch:75%;font-weight:800;text-wrap:balance}
   cards.forEach(function (card) {
     var form = card.querySelector('form');
     var choices = Array.prototype.slice.call(form.querySelectorAll('[data-choice]'));
-    var picked = '';
+    // Buy, Build and Sell can be combined, so each button toggles on its own.
+    function pickedChoices() {
+      return choices.filter(function (b) { return b.getAttribute('aria-pressed') === 'true'; })
+        .map(function (b) { return b.getAttribute('data-choice'); });
+    }
 
     choices.forEach(function (button) {
       button.addEventListener('click', function () {
-        picked = button.getAttribute('data-choice');
-        choices.forEach(function (b) { b.setAttribute('aria-pressed', b === button ? 'true' : 'false'); });
+        button.setAttribute('aria-pressed', button.getAttribute('aria-pressed') === 'true' ? 'false' : 'true');
         setError(form, 'pick', '');
       });
     });
@@ -626,11 +664,12 @@ h1,h2,h3{margin:0;font-stretch:75%;font-weight:800;text-wrap:balance}
       var name = form.querySelector('[data-field="name"]').value.trim();
       var phone = form.querySelector('[data-field="phone"]').value.trim();
       var email = form.querySelector('[data-field="email"]').value.trim();
+      var picked = pickedChoices();
       var errors = {
         name: name ? '' : 'Please add your name.',
         phone: phone.replace(/[^0-9]/g, '').length >= 10 ? '' : 'Please add your phone number with area code.',
         email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ? '' : 'Please add a valid email address.',
-        pick: picked ? '' : 'Please choose buy, build or sell.'
+        pick: picked.length ? '' : 'Please choose at least one: buy, build or sell.'
       };
       var firstProblem = '';
       Object.keys(errors).forEach(function (key) {
@@ -653,7 +692,7 @@ h1,h2,h3{margin:0;font-stretch:75%;font-weight:800;text-wrap:balance}
         name: name,
         phone: phone,
         email: email,
-        interest: picked,
+        interest: picked.join(', '),
         page: window.location.href,
         referrer: document.referrer || '',
         submitted_at: new Date().toISOString()
