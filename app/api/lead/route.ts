@@ -1,12 +1,10 @@
 // Receives lead form posts from public/index.html and forwards them to Zapier.
 //
-// Leads go to the Zapier "Catch Hook" below. This file only runs on the server,
-// so the URL is never sent to visitors' browsers. To point at a different Zap
-// without a code change, set ZAPIER_WEBHOOK_URL in the Vercel project; it wins.
-// Set it to "test" to stop sending: the route then answers { test: true } and
-// the thank-you screen says nothing was sent.
-
-const DEFAULT_ZAPIER_WEBHOOK_URL = 'https://hooks.zapier.com/hooks/catch/11875736/452ld82/'
+// Leads go to the Zapier "Catch Hook" URL in the ZAPIER_WEBHOOK_URL environment
+// variable, set in the Vercel project. Keep the URL out of this repository:
+// anyone who has it can post fake leads into the Zap. Until it is set (or when
+// it is set to "test") the route answers { test: true } and the thank-you
+// screen says nothing was sent.
 
 const TRACKING_KEYS = [
   'utm_source',
@@ -78,8 +76,8 @@ export async function POST(request: Request) {
   }
   for (const key of TRACKING_KEYS) lead[key] = text(input[key], 300)
 
-  const webhook = process.env.ZAPIER_WEBHOOK_URL || DEFAULT_ZAPIER_WEBHOOK_URL
-  if (webhook === 'test') return json({ ok: true, test: true })
+  const webhook = process.env.ZAPIER_WEBHOOK_URL
+  if (!webhook || webhook === 'test') return json({ ok: true, test: true })
 
   try {
     const res = await fetch(webhook, {
