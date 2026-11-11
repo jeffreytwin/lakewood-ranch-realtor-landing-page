@@ -84,6 +84,8 @@ h1,h2,h3{margin:0;font-stretch:75%;font-weight:800;text-wrap:balance}
 .form-card__intro{margin:6px 0 20px;font-size:15px;line-height:1.5;color:var(--muted)}
 .lead-form{margin:0;display:flex;flex-direction:column;gap:14px}
 .field{display:flex;flex-direction:column;gap:6px}
+.field-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.field-row .field{min-width:0}
 .field label,.choice legend{font-size:14px;font-weight:600;line-height:1.4;color:var(--navy)}
 .field input{width:100%;height:48px;padding:0 14px;border:1.5px solid var(--field);border-radius:10px;background:#FFFFFF;font-family:inherit;font-size:16px;color:var(--navy)}
 .field input::placeholder{color:#8A93A8;opacity:1}
@@ -259,10 +261,17 @@ h1,h2,h3{margin:0;font-stretch:75%;font-weight:800;text-wrap:balance}
 <h2>Talk to a Lakewood Ranch Expert</h2>
 <p class="form-card__intro">We'll help you find the right village and home.</p>
 <form class="lead-form" novalidate>
+<div class="field-row">
 <div class="field">
-<label for="a-name">Name</label>
-<input id="a-name" name="fullName" type="text" autocomplete="name" placeholder="First and last name" data-field="name" aria-describedby="a-name-err">
-<p class="error" id="a-name-err" data-error="name" role="alert" hidden></p>
+<label for="a-first">First name</label>
+<input id="a-first" name="firstName" type="text" autocomplete="given-name" autocapitalize="words" data-field="first" aria-describedby="a-first-err">
+<p class="error" id="a-first-err" data-error="first" role="alert" hidden></p>
+</div>
+<div class="field">
+<label for="a-last">Last name</label>
+<input id="a-last" name="lastName" type="text" autocomplete="family-name" autocapitalize="words" data-field="last" aria-describedby="a-last-err">
+<p class="error" id="a-last-err" data-error="last" role="alert" hidden></p>
+</div>
 </div>
 <div class="field">
 <label for="a-phone">Phone</label>
@@ -488,10 +497,17 @@ h1,h2,h3{margin:0;font-stretch:75%;font-weight:800;text-wrap:balance}
 <h2>Talk to a Lakewood Ranch Expert</h2>
 <p class="form-card__intro">We'll help you find the right village and home.</p>
 <form class="lead-form" novalidate>
+<div class="field-row">
 <div class="field">
-<label for="b-name">Name</label>
-<input id="b-name" name="fullName" type="text" autocomplete="name" placeholder="First and last name" data-field="name" aria-describedby="b-name-err">
-<p class="error" id="b-name-err" data-error="name" role="alert" hidden></p>
+<label for="b-first">First name</label>
+<input id="b-first" name="firstName" type="text" autocomplete="given-name" autocapitalize="words" data-field="first" aria-describedby="b-first-err">
+<p class="error" id="b-first-err" data-error="first" role="alert" hidden></p>
+</div>
+<div class="field">
+<label for="b-last">Last name</label>
+<input id="b-last" name="lastName" type="text" autocomplete="family-name" autocapitalize="words" data-field="last" aria-describedby="b-last-err">
+<p class="error" id="b-last-err" data-error="last" role="alert" hidden></p>
+</div>
 </div>
 <div class="field">
 <label for="b-phone">Phone</label>
@@ -695,7 +711,7 @@ h1,h2,h3{margin:0;font-stretch:75%;font-weight:800;text-wrap:balance}
 
     maskPhone(form.querySelector('[data-field="phone"]'));
 
-    ['name', 'phone', 'email'].forEach(function (key) {
+    ['first', 'last', 'phone', 'email'].forEach(function (key) {
       form.querySelector('[data-field="' + key + '"]').addEventListener('input', function () {
         setError(form, key, '');
       });
@@ -703,12 +719,14 @@ h1,h2,h3{margin:0;font-stretch:75%;font-weight:800;text-wrap:balance}
 
     form.addEventListener('submit', function (e) {
       e.preventDefault();
-      var name = form.querySelector('[data-field="name"]').value.trim();
+      var first = form.querySelector('[data-field="first"]').value.trim();
+      var last = form.querySelector('[data-field="last"]').value.trim();
       var phone = form.querySelector('[data-field="phone"]').value.trim();
       var email = form.querySelector('[data-field="email"]').value.trim();
       var picked = pickedChoices();
       var errors = {
-        name: name ? '' : 'Please add your name.',
+        first: first ? '' : 'Please add your first name.',
+        last: last ? '' : 'Please add your last name.',
         phone: /^[2-9]\d{9}$/.test(phoneDigits(phone)) ? '' : 'Please add your 10-digit phone number with area code.',
         email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ? '' : 'Please add a valid email address.',
         pick: picked.length ? '' : 'Please choose at least one: buy, build or sell.'
@@ -731,7 +749,8 @@ h1,h2,h3{margin:0;font-stretch:75%;font-weight:800;text-wrap:balance}
       submit.textContent = 'Sending...';
 
       var lead = Object.assign({
-        name: name,
+        first_name: first,
+        last_name: last,
         phone: phone,
         email: email,
         interests: picked,
@@ -742,7 +761,7 @@ h1,h2,h3{margin:0;font-stretch:75%;font-weight:800;text-wrap:balance}
       }, tracking);
 
       sendLead(lead).then(function (result) {
-        showThanks(name.split(/\s+/)[0], picked, card, !!(result && result.test));
+        showThanks(first, picked, card, !!(result && result.test));
       }).catch(function () {
         submit.disabled = false;
         submit.textContent = label;
