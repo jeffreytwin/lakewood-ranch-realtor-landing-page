@@ -90,6 +90,7 @@ h1,h2,h3{margin:0;font-stretch:75%;font-weight:800;text-wrap:balance}
 .field input:focus{outline:none;border-color:var(--sky);box-shadow:0 0 0 3px rgba(56,164,212,.28)}
 .field input[aria-invalid="true"]{border-color:var(--error)}
 .error{margin:0;font-size:13px;line-height:1.4;color:var(--error)}
+.hp{position:absolute;left:-10000px;width:1px;height:1px;overflow:hidden}
 .choice{margin:0;padding:0;border:0;min-width:0}
 .choice legend{padding:0;margin:0 0 6px}
 .choice__hint{font-weight:400;color:var(--muted)}
@@ -273,6 +274,7 @@ h1,h2,h3{margin:0;font-stretch:75%;font-weight:800;text-wrap:balance}
 <input id="a-email" name="email" type="email" inputmode="email" autocomplete="email" autocapitalize="off" spellcheck="false" placeholder="you@example.com" data-field="email" aria-describedby="a-email-err">
 <p class="error" id="a-email-err" data-error="email" role="alert" hidden></p>
 </div>
+<div class="hp" aria-hidden="true"><label for="a-website">Website</label><input id="a-website" name="website" type="text" tabindex="-1" autocomplete="off" data-hp></div>
 <fieldset class="choice">
 <legend>I want to <span class="choice__hint">(pick any)</span></legend>
 <div class="choice__row">
@@ -501,6 +503,7 @@ h1,h2,h3{margin:0;font-stretch:75%;font-weight:800;text-wrap:balance}
 <input id="b-email" name="email" type="email" inputmode="email" autocomplete="email" autocapitalize="off" spellcheck="false" placeholder="you@example.com" data-field="email" aria-describedby="b-email-err">
 <p class="error" id="b-email-err" data-error="email" role="alert" hidden></p>
 </div>
+<div class="hp" aria-hidden="true"><label for="b-website">Website</label><input id="b-website" name="website" type="text" tabindex="-1" autocomplete="off" data-hp></div>
 <fieldset class="choice">
 <legend>I want to <span class="choice__hint">(pick any)</span></legend>
 <div class="choice__row">
@@ -548,9 +551,9 @@ h1,h2,h3{margin:0;font-stretch:75%;font-weight:800;text-wrap:balance}
 (function () {
   'use strict';
 
-  // Where leads are sent. Empty = test mode: the form validates and thanks
-  // the visitor, but nothing leaves the page.
-  var LEAD_ENDPOINT = '';
+  // Where leads are sent: app/api/lead/route.ts, which forwards them to Zapier.
+  // Until ZAPIER_WEBHOOK_URL is set on the server it answers { test: true }.
+  var LEAD_ENDPOINT = '/api/lead';
 
   // Keep ad tracking (UTM tags and click IDs) with the lead.
   var tracking = {};
@@ -579,14 +582,77 @@ h1,h2,h3{margin:0;font-stretch:75%;font-weight:800;text-wrap:balance}
     if (input) input.setAttribute('aria-invalid', message ? 'true' : 'false');
   }
 
+  // Phone numbers: US only, 10 digits, shown as (941) 555-0123.
+  // A leading 1 (from +1 or autofill) is dropped when it makes an 11th digit.
+  function phoneDigits(value) {
+    var digits = value.replace(/\D/g, '');
+    if (digits.length > 10 && digits.charAt(0) === '1') digits = digits.slice(1);
+    return digits;
+  }
+
+  function formatPhone(digits) {
+    if (!digits) return '';
+    if (digits.length < 4) return '(' + digits;
+    if (digits.length < 7) return '(' + digits.slice(0, 3) + ') ' + digits.slice(3);
+    return '(' + digits.slice(0, 3) + ') ' + digits.slice(3, 6) + '-' + digits.slice(6, 10);
+  }
+
+  function countDigits(value) {
+    return value.replace(/\D/g, '').length;
+  }
+
+  function maskPhone(input) {
+    var last = input.value;
+    input.addEventListener('input', function (e) {
+      var raw = input.value;
+      var caret = input.selectionStart == null ? raw.length : input.selectionStart;
+      var type = e.inputType || '';
+      // Backspace or delete on "(", ")", " " or "-" removes the digit next to it.
+      if (countDigits(raw) === countDigits(last) && raw.length < last.length) {
+        if (type === 'deleteContentBackward') {
+          var head = raw.slice(0, caret).replace(/\d(\D*)$/, '$1');
+          raw = head + raw.slice(caret);
+          caret = head.length;
+        } else if (type === 'deleteContentForward') {
+          raw = raw.slice(0, caret) + raw.slice(caret).replace(/^(\D*)\d/, '$1');
+        }
+      }
+      var allDigits = raw.replace(/\D/g, '');
+      var digitsBefore = countDigits(raw.slice(0, caret));
+      if (allDigits.length > 10 && allDigits.charAt(0) === '1') digitsBefore = Math.max(0, digitsBefore - 1);
+      var digits = phoneDigits(raw);
+      // Typing into a full number does nothing; pasted extras are cut off.
+      if (digits.length > 10 && countDigits(last) >= 10) {
+        var keep = Math.max(0, caret - (raw.length - last.length));
+        input.value = last;
+        input.setSelectionRange(keep, keep);
+        return;
+      }
+      digits = digits.slice(0, 10);
+      digitsBefore = Math.min(digitsBefore, digits.length);
+      var formatted = formatPhone(digits);
+      input.value = formatted;
+      last = formatted;
+      // Put the caret back after the same number of digits.
+      var pos = 0;
+      var seen = 0;
+      while (pos < formatted.length && seen < digitsBefore) {
+        if (/\d/.test(formatted.charAt(pos))) seen++;
+        pos++;
+      }
+      if (digitsBefore === digits.length) pos = formatted.length;
+      if (document.activeElement === input) input.setSelectionRange(pos, pos);
+    });
+  }
+
   function sendLead(lead) {
-    if (!LEAD_ENDPOINT) return Promise.resolve();
     return fetch(LEAD_ENDPOINT, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(lead)
     }).then(function (res) {
       if (!res.ok) throw new Error('Lead request failed: ' + res.status);
+      return res.json().catch(function () { return {}; });
     });
   }
 
@@ -598,14 +664,14 @@ h1,h2,h3{margin:0;font-stretch:75%;font-weight:800;text-wrap:balance}
     return parts.slice(0, -1).join(', ') + ' and ' + parts[parts.length - 1];
   }
 
-  function showThanks(firstName, picks, fromCard) {
+  function showThanks(firstName, picks, fromCard, testMode) {
     cards.forEach(function (card) {
       card.querySelector('[data-form-body]').hidden = true;
       var thanks = card.querySelector('[data-thanks]');
       thanks.querySelector('[data-first-name]').textContent = firstName;
       thanks.querySelector('[data-about]').textContent = describe(picks);
       var note = thanks.querySelector('[data-test-note]');
-      if (note) note.hidden = !!LEAD_ENDPOINT;
+      if (note) note.hidden = !testMode;
       thanks.hidden = false;
     });
     fromCard.querySelector('[data-thanks]').focus();
@@ -627,6 +693,8 @@ h1,h2,h3{margin:0;font-stretch:75%;font-weight:800;text-wrap:balance}
       });
     });
 
+    maskPhone(form.querySelector('[data-field="phone"]'));
+
     ['name', 'phone', 'email'].forEach(function (key) {
       form.querySelector('[data-field="' + key + '"]').addEventListener('input', function () {
         setError(form, key, '');
@@ -641,7 +709,7 @@ h1,h2,h3{margin:0;font-stretch:75%;font-weight:800;text-wrap:balance}
       var picked = pickedChoices();
       var errors = {
         name: name ? '' : 'Please add your name.',
-        phone: phone.replace(/[^0-9]/g, '').length >= 10 ? '' : 'Please add your phone number with area code.',
+        phone: /^[2-9]\d{9}$/.test(phoneDigits(phone)) ? '' : 'Please add your 10-digit phone number with area code.',
         email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ? '' : 'Please add a valid email address.',
         pick: picked.length ? '' : 'Please choose at least one: buy, build or sell.'
       };
@@ -666,14 +734,15 @@ h1,h2,h3{margin:0;font-stretch:75%;font-weight:800;text-wrap:balance}
         name: name,
         phone: phone,
         email: email,
-        interest: picked.join(', '),
+        interests: picked,
+        website: form.querySelector('[data-hp]').value,
         page: window.location.href,
         referrer: document.referrer || '',
         submitted_at: new Date().toISOString()
       }, tracking);
 
-      sendLead(lead).then(function () {
-        showThanks(name.split(/\s+/)[0], picked, card);
+      sendLead(lead).then(function (result) {
+        showThanks(name.split(/\s+/)[0], picked, card, !!(result && result.test));
       }).catch(function () {
         submit.disabled = false;
         submit.textContent = label;
