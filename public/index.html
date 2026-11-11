@@ -135,7 +135,9 @@ h1,h2,h3{margin:0;font-stretch:75%;font-weight:800;text-wrap:balance}
 .village-list{flex:1.45 1 480px;min-width:0;margin:0;padding:0;list-style:none;display:flex;flex-wrap:wrap;gap:4px 22px;font-stretch:75%;font-weight:600;font-size:clamp(17px,1.55vw,21px);line-height:1.45;color:rgba(255,255,255,.86)}
 
 /* Building new */
-.build{background:var(--sand)}
+.build{position:relative;overflow:hidden;isolation:isolate;background:var(--sand)}
+/* Builder-visit photo, washed into the sand and faded out before the FAQ. */
+.build__bg{position:absolute;z-index:-1;top:0;left:0;width:56%;height:100%;max-width:none;object-fit:cover;object-position:38% 40%;opacity:.28;-webkit-mask-image:linear-gradient(90deg,#000 45%,transparent 100%);mask-image:linear-gradient(90deg,#000 45%,transparent 100%)}
 .build .wrap{display:flex;flex-wrap:wrap;align-items:flex-start;gap:clamp(32px,5vw,72px)}
 .build__intro{flex:1 1 360px;min-width:0}
 .build h2{font-size:clamp(38px,4.2vw,58px);line-height:1.02;color:var(--purple)}
@@ -179,6 +181,7 @@ h1,h2,h3{margin:0;font-stretch:75%;font-weight:800;text-wrap:balance}
 .sticky{display:none}
 
 @media (max-width:900px){
+  .build__bg{width:100%;height:min(560px,70%);object-position:45% 35%;-webkit-mask-image:linear-gradient(180deg,#000 45%,transparent 100%);mask-image:linear-gradient(180deg,#000 45%,transparent 100%)}
   .hero__grid{grid-template-columns:minmax(0,1fr);grid-template-areas:"copy" "form" "video";grid-template-rows:auto;row-gap:28px}
   .team-photo{margin-top:0}
 }
@@ -349,6 +352,7 @@ h1,h2,h3{margin:0;font-stretch:75%;font-weight:800;text-wrap:balance}
 </section>
 
 <section class="build section" aria-labelledby="build-title">
+<img class="build__bg" src="images/builder-visit-1600.jpg" srcset="images/builder-visit-800.jpg 800w, images/builder-visit-1600.jpg 1600w" sizes="(max-width: 900px) 100vw, 56vw" width="1600" height="900" loading="lazy" decoding="async" alt="">
 <div class="wrap">
 <div class="build__intro">
 <p class="eyebrow">Building new?</p>
