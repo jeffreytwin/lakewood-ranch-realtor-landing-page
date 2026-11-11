@@ -74,15 +74,9 @@ h1,h2,h3{margin:0;font-stretch:75%;font-weight:800;text-wrap:balance}
 .proof__big{font-stretch:75%;font-weight:800;font-size:20px;line-height:1.15}
 .proof__label{margin-top:6px;font-size:14px;line-height:1.4;color:#E6EBF7}
 
-/* Video */
-.video{grid-area:video;position:relative;margin-top:28px;max-width:640px;aspect-ratio:16/9;border-radius:14px;overflow:hidden;background:#0B1220;box-shadow:0 18px 44px rgba(8,14,28,.45)}
-.video__btn{position:absolute;inset:0;display:block;color:#FFFFFF;text-decoration:none}
-.video__btn img{width:100%;height:100%;object-fit:cover;transition:transform .4s ease}
-.video__btn:hover img{transform:scale(1.03)}
-.video__play{position:absolute;left:50%;top:50%;width:76px;height:76px;margin:-38px 0 0 -38px;border-radius:50%;border:3px solid #FFFFFF;background:var(--green);display:flex;align-items:center;justify-content:center;box-shadow:0 8px 24px rgba(8,14,28,.35);transition:transform .15s ease}
-.video__btn:hover .video__play{transform:scale(1.06)}
-.video__label{position:absolute;left:14px;bottom:12px;padding:4px 10px;border-radius:999px;background:rgba(78,56,140,.85);font-size:13px;font-weight:600;line-height:1.5;color:#FFFFFF}
-.video iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+/* Team photo */
+.team-photo{grid-area:video;margin:28px 0 0;max-width:640px;aspect-ratio:2000/926;border-radius:14px;overflow:hidden;background:#0B1220;box-shadow:0 18px 44px rgba(8,14,28,.45)}
+.team-photo img{display:block;width:100%;height:100%;object-fit:cover}
 
 /* Lead form */
 .form-card{grid-area:form;min-width:0;background:#FFFFFF;color:var(--ink);border-radius:16px;box-shadow:0 24px 60px rgba(8,14,28,.38);padding:clamp(22px,2.4vw,32px)}
@@ -183,7 +177,7 @@ h1,h2,h3{margin:0;font-stretch:75%;font-weight:800;text-wrap:balance}
 
 @media (max-width:900px){
   .hero__grid{grid-template-columns:minmax(0,1fr);grid-template-areas:"copy" "form" "video";grid-template-rows:auto;row-gap:28px}
-  .video{margin-top:0}
+  .team-photo{margin-top:0}
 }
 @media (max-width:600px){
   /* Phones: tighter hero so the form starts above the fold. */
@@ -208,7 +202,7 @@ h1,h2,h3{margin:0;font-stretch:75%;font-weight:800;text-wrap:balance}
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
   *{transition:none !important}
-  .btn:hover,.video__btn:hover img,.video__btn:hover .video__play{transform:none}
+  .btn:hover{transform:none}
 }
 </style>
 </head>
@@ -218,7 +212,7 @@ h1,h2,h3{margin:0;font-stretch:75%;font-weight:800;text-wrap:balance}
 <header class="site-header">
 <div class="wrap">
 <img class="logo" src="https://static.wixstatic.com/media/d0be81_42af6a4401b14cb2a182a5b7b21b5f84~mv2.png/v1/fill/w_600,h_152,al_c,q_90/life-at-lakewood-logo.png" width="600" height="152" alt="Life at Lakewood, your ultimate independent guide to Lakewood Ranch, FL">
-<div class="header-call"><span>Questions? Call us</span><a class="phone-big" href="tel:+19417774049">(941) 777-4049</a></div>
+<div class="header-call"><span>Questions? Call us</span><a class="phone-big" href="tel:+12148430130">(214) 843-0130</a></div>
 </div>
 </header>
 
@@ -293,24 +287,20 @@ h1,h2,h3{margin:0;font-stretch:75%;font-weight:800;text-wrap:balance}
 <p class="reassure">Talking to us is free. No pressure. We usually reply the same day.</p>
 <p class="consent">By submitting, you agree we may call, text or email you about your search. See our <a href="https://www.lifeatlakewood.com/privacy-policy">Privacy Policy</a>.</p>
 </form>
-<p class="call-alt">Rather talk now? Call <a href="tel:+19417774049">(941) 777-4049</a></p>
+<p class="call-alt">Rather talk now? Call <a href="tel:+12148430130">(214) 843-0130</a></p>
 </div>
 <div class="thanks" data-thanks role="status" tabindex="-1" hidden>
 <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#2E9E6B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M8 12.5l2.6 2.6L16 9.5"></path></svg>
 <h2>Thanks, <span data-first-name></span>!</h2>
 <p>A Lakewood Ranch expert will reach out soon about <span data-about>your plans</span>. We usually reply the same day.</p>
-<p>Want to talk now? Call <a href="tel:+19417774049">(941) 777-4049</a>.</p>
+<p>Want to talk now? Call <a href="tel:+12148430130">(214) 843-0130</a>.</p>
 <p class="note" data-test-note>Test mode: this form is not connected yet, so nothing was sent.</p>
 </div>
 </div>
 
-<div class="video" data-video="eWZOX72oonU">
-<a class="video__btn" href="https://www.youtube.com/watch?v=eWZOX72oonU" aria-label="Play video: Go With the Best Realtors in Lakewood Ranch">
-<img src="https://i.ytimg.com/vi/eWZOX72oonU/maxresdefault.jpg" srcset="https://i.ytimg.com/vi/eWZOX72oonU/hqdefault.jpg 480w, https://i.ytimg.com/vi/eWZOX72oonU/maxresdefault.jpg 1280w" sizes="(max-width: 900px) 92vw, 640px" width="1280" height="720" alt="">
-<span class="video__play" aria-hidden="true"><svg width="28" height="28" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z" fill="#FFFFFF"></path></svg></span>
-<span class="video__label">Watch the video</span>
-</a>
-</div>
+<figure class="team-photo">
+<img src="images/team-1400.jpg" srcset="images/team-700.jpg 700w, images/team-1400.jpg 1400w" sizes="(max-width: 900px) 92vw, 640px" width="1400" height="648" alt="The Life at Lakewood team of four Lakewood Ranch realtors, smiling in front of a black-framed glass door">
+</figure>
 </div>
 </section>
 
@@ -488,7 +478,7 @@ h1,h2,h3{margin:0;font-stretch:75%;font-weight:800;text-wrap:balance}
 <p class="eyebrow eyebrow--sky">Your next step</p>
 <h2 id="final-title">Ready to Find Your Place in Lakewood Ranch?</h2>
 <p>Tell us what you're looking for. A local expert will reach out, usually the same day.</p>
-<p>Or call us at <a href="tel:+19417774049">(941) 777-4049</a></p>
+<p>Or call us at <a href="tel:+12148430130">(214) 843-0130</a></p>
 </div>
 
 <div class="form-card" id="get-started" data-form-card>
@@ -541,7 +531,7 @@ h1,h2,h3{margin:0;font-stretch:75%;font-weight:800;text-wrap:balance}
 <div class="wrap">
 <div class="site-footer__top">
 <img class="cb-logo" src="https://static.wixstatic.com/media/d0be81_c2c2013de5954a3e82be74f1a83c51da~mv2.png" width="850" height="79" loading="lazy" alt="Coldwell Banker Realty">
-<a class="phone" href="tel:+19417774049">(941) 777-4049</a>
+<a class="phone" href="tel:+12148430130">(214) 843-0130</a>
 </div>
 <p>Life at Lakewood · Lynn Brown, REALTOR® (licensed in the state of Florida) · Coldwell Banker Realty · 8334 Market Street, Lakewood Ranch, FL 34202</p>
 <p>Life at Lakewood is an independent resource and is not affiliated with the official developers of Lakewood Ranch. Equal Housing Opportunity.</p>
@@ -551,7 +541,7 @@ h1,h2,h3{margin:0;font-stretch:75%;font-weight:800;text-wrap:balance}
 
 <div class="sticky" data-sticky>
 <a class="btn" href="#lead-form">Get My Lakewood Ranch Expert</a>
-<a class="sticky__call" href="tel:+19417774049" aria-label="Call (941) 777-4049"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg></a>
+<a class="sticky__call" href="tel:+12148430130" aria-label="Call (214) 843-0130"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg></a>
 </div>
 
 <script>
@@ -574,22 +564,6 @@ h1,h2,h3{margin:0;font-stretch:75%;font-weight:800;text-wrap:balance}
     else tracking = JSON.parse(sessionStorage.getItem('lw_tracking') || '{}');
   } catch (e) { /* storage blocked: keep what the URL gave us */ }
 
-  // Video: load the YouTube player only when someone presses play.
-  var video = document.querySelector('[data-video]');
-  if (video) {
-    video.querySelector('a').addEventListener('click', function (e) {
-      e.preventDefault();
-      var frame = document.createElement('iframe');
-      frame.src = 'https://www.youtube-nocookie.com/embed/' + video.getAttribute('data-video') + '?autoplay=1&rel=0&playsinline=1';
-      frame.title = 'Go With the Best Realtors in Lakewood Ranch';
-      frame.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
-      frame.setAttribute('allowfullscreen', '');
-      frame.referrerPolicy = 'strict-origin-when-cross-origin';
-      video.innerHTML = '';
-      video.appendChild(frame);
-      frame.focus();
-    });
-  }
 
   // Lead forms (one in the hero, one at the bottom).
   var ABOUT = { Buy: 'your home search', Build: 'your new build', Sell: 'selling your home' };
@@ -703,7 +677,7 @@ h1,h2,h3{margin:0;font-stretch:75%;font-weight:800;text-wrap:balance}
       }).catch(function () {
         submit.disabled = false;
         submit.textContent = label;
-        setError(form, 'send', 'Something went wrong. Please try again, or call us at (941) 777-4049.');
+        setError(form, 'send', 'Something went wrong. Please try again, or call us at (214) 843-0130.');
       });
     });
   });
