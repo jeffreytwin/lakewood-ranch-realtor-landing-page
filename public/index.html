@@ -87,9 +87,10 @@ h1,h2,h3{margin:0;font-stretch:75%;font-weight:800;text-wrap:balance}
 .field-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
 .field-row .field{min-width:0}
 .field label,.choice legend{font-size:14px;font-weight:600;line-height:1.4;color:var(--navy)}
-.field input{width:100%;height:48px;padding:0 14px;border:1.5px solid var(--field);border-radius:10px;background:#FFFFFF;font-family:inherit;font-size:16px;color:var(--navy)}
-.field input::placeholder{color:#8A93A8;opacity:1}
-.field input:focus{outline:none;border-color:var(--sky);box-shadow:0 0 0 3px rgba(56,164,212,.28)}
+.field input,.field textarea{width:100%;height:48px;padding:0 14px;border:1.5px solid var(--field);border-radius:10px;background:#FFFFFF;font-family:inherit;font-size:16px;color:var(--navy)}
+.field textarea{display:block;height:auto;min-height:72px;padding:11px 14px;line-height:1.45;resize:vertical}
+.field input::placeholder,.field textarea::placeholder{color:#8A93A8;opacity:1}
+.field input:focus,.field textarea:focus{outline:none;border-color:var(--sky);box-shadow:0 0 0 3px rgba(56,164,212,.28)}
 .field input[aria-invalid="true"]{border-color:var(--error)}
 .error{margin:0;font-size:13px;line-height:1.4;color:var(--error)}
 .hp{position:absolute;left:-10000px;width:1px;height:1px;overflow:hidden}
@@ -311,6 +312,10 @@ h1,h2,h3{margin:0;font-stretch:75%;font-weight:800;text-wrap:balance}
 </div>
 <p class="error" data-error="pick" role="alert" hidden></p>
 </fieldset>
+<div class="field">
+<label for="a-message">Anything we should know? <span class="choice__hint">(optional)</span></label>
+<textarea id="a-message" name="message" rows="2" maxlength="1000" placeholder="e.g. Moving in the spring, want a pool, around $600k" data-field="message"></textarea>
+</div>
 <button type="submit" class="btn">Get My Lakewood Ranch Expert</button>
 <p class="error" data-error="send" role="alert" hidden></p>
 <p class="reassure">Talking to us is free. No pressure. We usually reply the same day.</p>
@@ -548,6 +553,10 @@ h1,h2,h3{margin:0;font-stretch:75%;font-weight:800;text-wrap:balance}
 </div>
 <p class="error" data-error="pick" role="alert" hidden></p>
 </fieldset>
+<div class="field">
+<label for="b-message">Anything we should know? <span class="choice__hint">(optional)</span></label>
+<textarea id="b-message" name="message" rows="2" maxlength="1000" placeholder="e.g. Moving in the spring, want a pool, around $600k" data-field="message"></textarea>
+</div>
 <button type="submit" class="btn">Get My Lakewood Ranch Expert</button>
 <p class="error" data-error="send" role="alert" hidden></p>
 <p class="reassure">Talking to us is free. No pressure. We usually reply the same day.</p>
@@ -773,6 +782,7 @@ h1,h2,h3{margin:0;font-stretch:75%;font-weight:800;text-wrap:balance}
         phone: phone,
         email: email,
         interests: picked,
+        message: form.querySelector('[data-field="message"]').value.trim(),
         website: form.querySelector('[data-hp]').value,
         page: window.location.href,
         referrer: document.referrer || '',
