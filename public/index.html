@@ -21,7 +21,7 @@
 <style>
 :root{
   --navy:#1E3054;--navy-deep:#141D31;--ink:#24304A;--ink-2:#3A4664;--muted:#4A5672;--fine:#6B7590;--slate:#616E89;
-  --sky:#38A4D4;--purple:#6B4F96;--peach:#FFA77F;--star:#F08A5D;
+  --sky:#38A4D4;--blue:#2D6FB5;--purple:#6B4F96;--peach:#FFA77F;--star:#F08A5D;
   --sand:#F5EFE6;--sand-line:#DCCDB6;--line:#E6E9F0;--field:#C5CCDA;--error:#B3261E;--ok:#2E9E6B;--green:#1E874F;--green-hover:#176C3F;
   --font:'Open Sans',Arial,sans-serif;--label:'Lexend Giga','Open Sans',Arial,sans-serif;
   --gutter:clamp(18px,4vw,32px);
@@ -121,7 +121,7 @@ h1,h2,h3{margin:0;font-stretch:75%;font-weight:800;text-wrap:balance}
 .card__split figure{margin:0;position:relative;min-width:0;min-height:0;overflow:hidden;border-radius:12px;border:4px solid var(--peach)}
 .card__split img{width:100%;height:100%;object-fit:cover}
 .tag{position:absolute;left:10px;bottom:10px;padding:3px 10px;border-radius:999px;background:#FFFFFF;font-family:var(--label);font-weight:600;font-size:11px;line-height:1.6;letter-spacing:.04em;text-transform:uppercase;color:var(--navy)}
-.card h3{margin-top:8px;font-size:26px;line-height:1.15;color:var(--navy)}
+.card h3{margin-top:8px;font-size:26px;line-height:1.15;color:var(--blue)}
 .card p{margin:0;color:var(--ink-2)}
 
 /* Villages */
@@ -182,12 +182,24 @@ h1,h2,h3{margin:0;font-stretch:75%;font-weight:800;text-wrap:balance}
 
 @media (max-width:900px){
   .build__bg{width:100%;height:min(560px,70%);object-position:45% 35%;-webkit-mask-image:linear-gradient(180deg,#000 45%,transparent 100%);mask-image:linear-gradient(180deg,#000 45%,transparent 100%)}
-  .hero__grid{grid-template-columns:minmax(0,1fr);grid-template-areas:"copy" "form" "video";grid-template-rows:auto;row-gap:28px}
-  .team-photo{margin-top:0}
+  /* One column: headline, team photo, stats, then the form. The copy block
+     dissolves so its pieces can sit around the photo. Spacing comes from
+     margins, since the hidden intro line would otherwise leave a row gap. */
+  .hero__grid{grid-template-columns:minmax(0,1fr);grid-template-areas:"eyebrow" "title" "video" "proof" "sub" "form";grid-template-rows:auto;row-gap:0}
+  .hero__copy{display:contents}
+  .hero__copy .eyebrow{grid-area:eyebrow}
+  .hero h1{grid-area:title}
+  .team-photo{margin-top:20px}
+  .proof{grid-area:proof}
+  .hero__sub{grid-area:sub;display:none}
+  .hero__sub[data-keep]{display:block}
+  .hero .form-card{margin-top:28px}
 }
 @media (max-width:600px){
   /* Phones: tighter hero so the form starts above the fold. */
-  .hero__grid{padding-block:22px 32px;row-gap:22px}
+  .hero__grid{padding-block:22px 32px}
+  .team-photo{margin-top:16px}
+  .hero .form-card{margin-top:22px}
   .hero .eyebrow{margin-bottom:10px}
   .proof{margin-top:16px;padding-block:14px;gap:12px 24px}
   .proof__num{font-size:28px}
@@ -251,7 +263,10 @@ h1,h2,h3{margin:0;font-stretch:75%;font-weight:800;text-wrap:balance}
   try {
     if (new URLSearchParams(window.location.search).get('v') === 'build') {
       document.getElementById('hero-title').textContent = 'Building in Lakewood Ranch? The Builder Pays Our Commission.';
-      document.getElementById('hero-sub').textContent = 'Get a local expert on your side to compare builders and villages. When you build, it costs you nothing.';
+      var sub = document.getElementById('hero-sub');
+      sub.textContent = 'Get a local expert on your side to compare builders and villages. When you build, it costs you nothing.';
+      sub.setAttribute('data-keep', ''); // phones show this line only for the build ad
+
     }
   } catch (e) {}
 })();
