@@ -66,6 +66,7 @@ export async function POST(request: Request) {
     phone_e164: `+1${digits}`,
     email,
     interest: interests.join(', '),
+    message: text(input.message, 1000),
     wants_to_buy: interests.includes('Buy') ? 'yes' : 'no',
     wants_to_build: interests.includes('Build') ? 'yes' : 'no',
     wants_to_sell: interests.includes('Sell') ? 'yes' : 'no',
