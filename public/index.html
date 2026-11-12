@@ -153,6 +153,11 @@ h1,h2,h3{margin:0;font-stretch:75%;font-weight:800;text-wrap:balance}
 .reviews__badge .g-logo{width:28px;height:28px}
 .reviews__badge strong{font-stretch:75%;font-weight:800;font-size:24px;line-height:1;color:var(--navy)}
 .reviews__badge .stars{font-size:18px}
+a.reviews__badge{text-decoration:none;transition:border-color .15s ease,box-shadow .15s ease}
+a.reviews__badge:hover{border-color:var(--navy);box-shadow:0 6px 18px rgba(30,48,84,.12)}
+.reviews__link{white-space:nowrap;text-decoration:underline;text-decoration-color:var(--sand-line);text-underline-offset:3px}
+a.reviews__badge:hover .reviews__link{text-decoration-color:currentColor}
+.reviews__arrow{flex:none;margin-left:-4px;color:var(--slate)}
 .reviews__grid{margin-top:clamp(28px,3vw,40px);display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
 .review{margin:0;min-width:0;display:flex;flex-direction:column;gap:14px;padding:24px 26px 26px;border:1px solid var(--sand-line);border-radius:14px;background:#FBF8F3}
 .review__head{margin:0;display:flex;align-items:center;gap:12px}
@@ -212,6 +217,13 @@ h1,h2,h3{margin:0;font-stretch:75%;font-weight:800;text-wrap:balance}
   .proof__label{margin-top:4px;font-size:13px}
   .hero__sub{margin-top:14px;font-size:16px}
   .cards,.reviews__grid{grid-template-columns:minmax(0,1fr)}
+  .reviews__badge{gap:8px;padding:8px 14px 8px 10px;font-size:14px}
+  .reviews__badge .g-logo{width:24px;height:24px}
+  .reviews__badge strong{font-size:21px}
+  .reviews__badge .stars{font-size:15px;letter-spacing:1px}
+}
+@media (max-width:360px){
+  .reviews__badge .stars{display:none}
 }
 @media (max-width:860px){
   body{padding-bottom:88px}
@@ -348,7 +360,7 @@ h1,h2,h3{margin:0;font-stretch:75%;font-weight:800;text-wrap:balance}
 <p class="eyebrow">Reviews</p>
 <h2 class="h2" id="reviews-title">The Results Speak for Themselves</h2>
 </div>
-<p class="reviews__badge"><svg class="g-logo" viewBox="0 0 48 48" aria-hidden="true"><use href="#g-logo"></use></svg><strong>5.0</strong><span class="stars" aria-hidden="true">★★★★★</span><span>74 Google reviews</span></p>
+<a class="reviews__badge" href="https://share.google/nvIyk8MtMwav8VV44" target="_blank" rel="noopener" aria-label="Rated 5.0 from 74 Google reviews. Read them on Google (opens in a new tab)"><svg class="g-logo" viewBox="0 0 48 48" aria-hidden="true"><use href="#g-logo"></use></svg><strong>5.0</strong><span class="stars" aria-hidden="true">★★★★★</span><span class="reviews__link">74 Google reviews</span><svg class="reviews__arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"></path></svg></a>
 </div>
 <div class="reviews__grid">
 <figure class="review">
