@@ -599,7 +599,7 @@ a.reviews__badge:hover .reviews__link{text-decoration-color:currentColor}
 </div>
 <p>Life at Lakewood · Lynn Brown, REALTOR® (licensed in the state of Florida) · Coldwell Banker Realty · 8334 Market Street, Lakewood Ranch, FL 34202</p>
 <p>Life at Lakewood is an independent resource and is not affiliated with the official developers of Lakewood Ranch. Equal Housing Opportunity.</p>
-<p><a href="https://www.lifeatlakewood.com/privacy-policy">Privacy Policy</a> · <a href="https://www.lifeatlakewood.com/terms-of-use">Terms of Service</a> · © 2026 Life at Lakewood</p>
+<p><a href="https://www.lifeatlakewood.com/privacy-policy">Privacy Policy</a> · <a href="https://www.lifeatlakewood.com/terms-of-use">Terms of Service</a> · © <span data-year>2026</span> Life at Lakewood</p>
 </div>
 </footer>
 
@@ -835,6 +835,9 @@ a.reviews__badge:hover .reviews__link{text-decoration-color:currentColor}
       });
     }).catch(function () { /* keep the numbers already on the page */ });
   }
+
+  // Footer year: always the current year (2026 is written in as a fallback).
+  document.querySelectorAll('[data-year]').forEach(function (el) { el.textContent = String(new Date().getFullYear()); });
 
   // Phones: hide the pinned button while a form is on screen.
   var sticky = document.querySelector('[data-sticky]');
