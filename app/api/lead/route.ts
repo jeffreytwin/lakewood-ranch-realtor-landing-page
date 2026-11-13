@@ -59,6 +59,7 @@ export async function POST(request: Request) {
 
   const now = new Date()
   const lead: Record<string, string> = {
+    lead_id: text(input.lead_id, 64),
     name: `${firstName} ${lastName}`,
     first_name: firstName,
     last_name: lastName,
