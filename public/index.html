@@ -101,8 +101,11 @@ h1,h2,h3{margin:0;font-stretch:75%;font-weight:800;text-wrap:balance}
 .proof__link,.proof__link:hover{color:#FFFFFF;font-weight:inherit;text-decoration:none}
 
 /* Team photo */
-.team-photo{grid-area:video;margin:28px 0 0;max-width:640px;aspect-ratio:2000/926;border-radius:14px;overflow:hidden;background:#0B1220;box-shadow:0 18px 44px rgba(8,14,28,.45)}
+.team-photo{grid-area:video;position:relative;margin:28px 0 0;max-width:640px;aspect-ratio:2000/926;border-radius:14px;overflow:hidden;background:#0B1220;box-shadow:0 18px 44px rgba(8,14,28,.45)}
 .team-photo img{display:block;width:100%;height:100%;object-fit:cover}
+/* Brokerage logo over the team photo, on a soft dark fade so white reads on the light jacket. */
+.team-photo::after{content:"";position:absolute;inset:auto 0 0 0;height:42%;background:linear-gradient(to top,rgba(10,16,30,.62),rgba(10,16,30,0));pointer-events:none}
+.team-photo img.team-photo__brand{position:absolute;z-index:1;left:clamp(12px,2.6%,18px);bottom:clamp(10px,3.2%,16px);width:clamp(150px,36%,232px);height:auto;object-fit:contain}
 
 /* Lead form */
 .form-card{grid-area:form;min-width:0;background:#FFFFFF;color:var(--ink);border-radius:16px;box-shadow:0 24px 60px rgba(8,14,28,.38);padding:clamp(22px,2.4vw,32px)}
@@ -288,7 +291,7 @@ a.reviews__badge:hover .reviews__link{text-decoration-color:currentColor}
 <div class="wrap hero__grid">
 
 <div class="hero__copy">
-<p class="eyebrow eyebrow--sky">Lakewood Ranch real estate experts</p>
+<p class="eyebrow eyebrow--sky">Experts in Lakewood Ranch</p>
 <h1 id="hero-title">The Best Realtors in Lakewood Ranch</h1>
 <ul class="proof" aria-label="Why buyers trust us">
 <li>
@@ -377,7 +380,8 @@ a.reviews__badge:hover .reviews__link{text-decoration-color:currentColor}
 </div>
 
 <figure class="team-photo">
-<img src="images/team-1400.jpg" srcset="images/team-700.jpg 700w, images/team-1400.jpg 1400w" sizes="(max-width: 900px) 92vw, 640px" width="1400" height="648" alt="The Life at Lakewood team of four Lakewood Ranch realtors, smiling in front of a black-framed glass door">
+<img class="team-photo__img" src="images/team-1400.jpg" srcset="images/team-700.jpg 700w, images/team-1400.jpg 1400w" sizes="(max-width: 900px) 92vw, 640px" width="1400" height="648" alt="The Life at Lakewood team of four Lakewood Ranch realtors, smiling in front of a black-framed glass door">
+<img class="team-photo__brand" src="images/coldwell-banker-realty-white.png" width="850" height="79" alt="Coldwell Banker Realty">
 </figure>
 </div>
 </section>
