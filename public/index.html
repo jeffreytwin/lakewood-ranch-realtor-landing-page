@@ -4,6 +4,31 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Lakewood Ranch Real Estate Experts | Life at Lakewood</title>
+<script>
+// Google Analytics 4 + Google Ads. Only the live domain reports, so previews
+// and local tests stay out of the numbers; add ?ga_debug to any URL to send
+// events anyway and see them in GA4's DebugView.
+// To switch on Google Ads conversions, fill in ads.id (AW-...) and the labels.
+window.LW_TAGS = {
+  ga4: 'G-T6CSETKJXL',
+  ads: { id: '', formLabel: '', callLabel: '' }
+};
+(function () {
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = function () { window.dataLayer.push(arguments); };
+  var tags = window.LW_TAGS;
+  var debug = /[?&]ga_debug/.test(window.location.search);
+  tags.on = window.location.hostname === 'realtors.lifeatlakewood.com' || debug;
+  if (!tags.on) return;
+  var s = document.createElement('script');
+  s.async = true;
+  s.src = 'https://www.googletagmanager.com/gtag/js?id=' + tags.ga4;
+  document.head.appendChild(s);
+  gtag('js', new Date());
+  gtag('config', tags.ga4, debug ? { debug_mode: true } : {});
+  if (tags.ads.id) gtag('config', tags.ads.id, { allow_enhanced_conversions: true });
+})();
+</script>
 <meta name="description" content="Find the right Lakewood Ranch home with the team that knows it best. Over 40 villages and one local team to help you narrow it down. Buying, building or selling, we've got you.">
 <meta name="robots" content="noindex, nofollow">
 <meta name="theme-color" content="#4E388C">
@@ -793,27 +818,63 @@ a.reviews__badge:hover .reviews__link{text-decoration-color:currentColor}
       submit.disabled = true;
       submit.textContent = 'Sending...';
 
+      var leadId = 'lw-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 8);
+      var honeypot = form.querySelector('[data-hp]').value;
       var lead = Object.assign({
+        lead_id: leadId,
         first_name: first,
         last_name: last,
         phone: phone,
         email: email,
         interests: picked,
         message: form.querySelector('[data-field="message"]').value.trim(),
-        website: form.querySelector('[data-hp]').value,
+        website: honeypot,
         page: window.location.href,
         referrer: document.referrer || '',
         submitted_at: new Date().toISOString()
       }, tracking);
 
       sendLead(lead).then(function (result) {
-        showThanks(first, picked, card, !!(result && result.test));
+        var testMode = !!(result && result.test);
+        showThanks(first, picked, card, testMode);
+        if (!testMode && !honeypot) trackLead(card, picked, { id: leadId, first: first, last: last, email: email, phone: phone });
       }).catch(function () {
         submit.disabled = false;
         submit.textContent = label;
         setError(form, 'send', 'Something went wrong. Please try again, or call us at (214) 843-0130.');
       });
     });
+  });
+
+  // Analytics: a lead counts only after the server confirms it was sent on
+  // (never in test mode or for the spam trap). GA4 gets generate_lead; Google
+  // Ads gets its conversion plus hashed contact details for enhanced
+  // conversions, de-duplicated by the lead ID.
+  var tags = window.LW_TAGS || { ads: {} };
+  var variant = /[?&]v=build/.test(window.location.search) ? 'build' : 'default';
+  function trackLead(card, picked, who) {
+    if (!tags.on || !window.gtag) return;
+    gtag('event', 'generate_lead', {
+      form_location: card.id === 'lead-form' ? 'hero' : 'bottom',
+      interest: picked.join(', '),
+      page_variant: variant
+    });
+    if (tags.ads.id && tags.ads.formLabel) {
+      gtag('set', 'user_data', {
+        email: who.email,
+        phone_number: '+1' + phoneDigits(who.phone),
+        address: { first_name: who.first, last_name: who.last }
+      });
+      gtag('event', 'conversion', { send_to: tags.ads.id + '/' + tags.ads.formLabel, transaction_id: who.id });
+    }
+  }
+  document.addEventListener('click', function (e) {
+    var link = e.target.closest && e.target.closest('a[href^="tel:"]');
+    if (!link || !tags.on || !window.gtag) return;
+    var where = link.closest('.site-header') ? 'header' : link.closest('[data-sticky]') ? 'sticky_bar'
+      : link.closest('.site-footer') ? 'footer' : link.closest('[data-thanks]') ? 'thank_you' : 'page';
+    gtag('event', 'phone_call_click', { link_location: where, page_variant: variant });
+    if (tags.ads.id && tags.ads.callLabel) gtag('event', 'conversion', { send_to: tags.ads.id + '/' + tags.ads.callLabel });
   });
 
   // Live Google rating and review count (app/api/reviews/route.ts, refreshed
