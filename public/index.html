@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Lakewood Ranch Real Estate Experts | Life at Lakewood</title>
+<title data-swap data-sell="Sell Your Lakewood Ranch Home | Life at Lakewood">Lakewood Ranch Real Estate Experts | Life at Lakewood</title>
 <script>
 // Google Analytics 4 + Google Ads. Only the live domain reports, so previews
 // and local tests stay out of the numbers; add ?ga_debug to any URL to send
@@ -28,6 +28,34 @@ window.LW_TAGS = {
   gtag('config', tags.ga4, debug ? { debug_mode: true } : {});
   if (tags.ads.id) gtag('config', tags.ads.id, { allow_enhanced_conversions: true });
 })();
+</script>
+<script>
+// Page versions, chosen by the ad's link: ?v=build (new-construction ads) and
+// ?v=sell (seller ads). Anything else shows the default page.
+// Elements marked data-swap carry their other wording in data-build / data-sell
+// (text) or data-sell-placeholder style attributes; lwApplyVariant() swaps it in.
+window.LW_VARIANT = (function () {
+  try {
+    var v = new URLSearchParams(window.location.search).get('v');
+    return v === 'build' || v === 'sell' ? v : 'default';
+  } catch (e) { return 'default'; }
+})();
+document.documentElement.setAttribute('data-v', window.LW_VARIANT);
+window.lwApplyVariant = function () {
+  var v = window.LW_VARIANT;
+  if (v === 'default') return;
+  var prefix = 'data-' + v;
+  Array.prototype.forEach.call(document.querySelectorAll('[data-swap]'), function (el) {
+    Array.prototype.slice.call(el.attributes).forEach(function (attr) {
+      if (attr.name === prefix) {
+        el.textContent = attr.value;
+        if (el.id === 'hero-sub') el.setAttribute('data-keep', ''); // phones show this line only for ad versions
+      } else if (attr.name.indexOf(prefix + '-') === 0) {
+        el.setAttribute(attr.name.slice(prefix.length + 1), attr.value);
+      }
+    });
+  });
+};
 </script>
 <meta name="description" content="Find the right Lakewood Ranch home with the team that knows it best. The Life At Lakewood team helps you narrow it down. As a Coldwell Banker team, we make buying, building or selling a breeze.">
 <meta name="robots" content="noindex, nofollow">
@@ -215,6 +243,11 @@ a.reviews__badge:hover .reviews__link{text-decoration-color:currentColor}
 .site-footer .phone{font-weight:700;color:var(--navy);text-decoration:none;white-space:nowrap}
 .cb-logo{height:22px;width:auto;filter:brightness(0)}
 
+/* Sections that belong to one page version (see LW_VARIANT in the head). */
+[data-v-only]{display:none}
+html[data-v="sell"] [data-v-only="sell"]{display:block}
+html[data-v="sell"] [data-v-hide="sell"]{display:none}
+
 /* Pinned mobile button */
 .sticky{display:none}
 
@@ -289,8 +322,8 @@ a.reviews__badge:hover .reviews__link{text-decoration-color:currentColor}
 
 <div class="hero__copy">
 <p class="eyebrow eyebrow--sky">The Life At Lakewood Team</p>
-<h1 id="hero-title">The Best Realtors in Lakewood Ranch</h1>
-<ul class="proof" aria-label="Why buyers trust us">
+<h1 id="hero-title" data-swap data-build="Building in Lakewood Ranch? The Builder Pays Our Commission." data-sell="Sell Your Lakewood Ranch Home With a Top-Rated Team">The Best Realtors in Lakewood Ranch</h1>
+<ul class="proof" aria-label="Why buyers trust us" data-swap data-sell-aria-label="Why sellers trust us">
 <li>
 <div class="proof__num">150+</div>
 <div class="proof__label">transactions on track for 2026</div>
@@ -304,27 +337,15 @@ a.reviews__badge:hover .reviews__link{text-decoration-color:currentColor}
 <div class="proof__label">for medium-sized teams (rated by <a class="proof__link" href="https://www.realtrends.com/team-profile/life-at-lakewood-florida-coldwell-banker-realty/" target="_blank" rel="noopener" aria-label="RealTrends (see our ranking, opens in a new tab)">RealTrends</a> in 2025)</div>
 </li>
 </ul>
-<p class="hero__sub" id="hero-sub">The Life At Lakewood team helps you narrow it down. As a Coldwell Banker team, we make buying, building or selling a breeze.</p>
-<script>
-(function () {
-  try {
-    if (new URLSearchParams(window.location.search).get('v') === 'build') {
-      document.getElementById('hero-title').textContent = 'Building in Lakewood Ranch? The Builder Pays Our Commission.';
-      var sub = document.getElementById('hero-sub');
-      sub.textContent = 'Get a local expert on your side to compare builders and villages. When you build, it costs you nothing.';
-      sub.setAttribute('data-keep', ''); // phones show this line only for the build ad
-
-    }
-  } catch (e) {}
-})();
-</script>
+<p class="hero__sub" id="hero-sub" data-swap data-build="Get a local expert on your side to compare builders and villages. When you build, it costs you nothing." data-sell="We live and work in Lakewood Ranch and know what buyers look for in every village. As a Coldwell Banker team, we handle pricing, marketing and negotiation for you.">The Life At Lakewood team helps you narrow it down. As a Coldwell Banker team, we make buying, building or selling a breeze.</p>
+<script>window.lwApplyVariant();</script>
 </div>
 
 
 <div class="form-card" id="lead-form" data-form-card>
 <div data-form-body>
-<h2>Take the first step</h2>
-<p class="form-card__intro">We'll help you narrow things down.</p>
+<h2 data-swap data-sell="Thinking of selling?">Take the first step</h2>
+<p class="form-card__intro" data-swap data-sell="Tell us about your home and we'll be in touch.">We'll help you narrow things down.</p>
 <form class="lead-form" novalidate>
 <div class="field-row">
 <div class="field">
@@ -360,9 +381,9 @@ a.reviews__badge:hover .reviews__link{text-decoration-color:currentColor}
 </fieldset>
 <div class="field">
 <label for="a-message">Anything we should know? <span class="choice__hint">(optional)</span></label>
-<textarea id="a-message" name="message" rows="2" maxlength="1000" placeholder="e.g. Moving in the spring, want a pool, around $600k" data-field="message"></textarea>
+<textarea id="a-message" name="message" rows="2" maxlength="1000" placeholder="e.g. Moving in the spring, want a pool, around $600k" data-swap data-sell-placeholder="e.g. 4 bedrooms in Greenbrook, hoping to sell by summer" data-field="message"></textarea>
 </div>
-<button type="submit" class="btn">Ask a Lakewood Ranch Expert</button>
+<button type="submit" class="btn" data-swap data-sell="Talk to a Listing Agent">Ask a Lakewood Ranch Expert</button>
 <p class="error" data-error="send" role="alert" hidden></p>
 <p class="reassure">Free · No obligation · We usually reply the same day.</p>
 </form>
@@ -377,10 +398,11 @@ a.reviews__badge:hover .reviews__link{text-decoration-color:currentColor}
 </div>
 
 <figure class="team-photo">
-<img src="images/team-1400.jpg" srcset="images/team-700.jpg 700w, images/team-1400.jpg 1400w" sizes="(max-width: 900px) 92vw, 640px" width="1400" height="648" alt="The Life at Lakewood team of four Lakewood Ranch realtors, smiling in front of a black-framed glass door">
+<img src="images/team-1400.jpg" srcset="images/team-700.jpg 700w, images/team-1400.jpg 1400w" sizes="(max-width: 900px) 92vw, 640px" width="1400" height="648" alt="The Life at Lakewood team of four realtors in Lakewood Ranch, smiling in front of a black-framed glass door">
 </figure>
 </div>
 </section>
+<script>window.lwApplyVariant();</script>
 
 <section class="reviews section" aria-labelledby="reviews-title">
 <div class="wrap">
@@ -426,7 +448,36 @@ a.reviews__badge:hover .reviews__link{text-decoration-color:currentColor}
 </div>
 </section>
 
-<section class="build section" aria-labelledby="build-title">
+<section class="build section" aria-labelledby="sell-title" data-v-only="sell">
+<div class="wrap">
+<div class="build__intro">
+<p class="eyebrow">Selling your home?</p>
+<h2 id="sell-title">Local experts to sell your home.</h2>
+<p>Your agent lives and works in Lakewood Ranch, knows your village and already works with the buyers looking here.</p>
+<a class="btn" href="#get-started">Talk to a Listing Agent</a>
+</div>
+<dl class="faq">
+<div>
+<dt>What is my home worth?</dt>
+<dd>It depends on your village, your lot and what has sold nearby. Tell us about your home and we'll walk you through a realistic price range.</dd>
+</div>
+<div>
+<dt>What does it cost to get started?</dt>
+<dd>Nothing up front. Our fee is handled at closing.</dd>
+</div>
+<div>
+<dt>Can you help me sell and buy or build at the same time?</dt>
+<dd>Yes. We handle both sides and plan the timing of your sale around your next home.</dd>
+</div>
+<div>
+<dt>Why use a specialist in Lakewood Ranch?</dt>
+<dd>Buyers here compare 40+ villages. We know how yours stacks up and how to present it to them.</dd>
+</div>
+</dl>
+</div>
+</section>
+
+<section class="build section" aria-labelledby="build-title" data-v-hide="sell">
 <img class="build__bg" src="images/builder-visit-1600.jpg" srcset="images/builder-visit-800.jpg 800w, images/builder-visit-1600.jpg 1600w" sizes="(max-width: 900px) 100vw, 56vw" width="1600" height="900" loading="lazy" decoding="async" alt="">
 <div class="wrap">
 <div class="build__intro">
@@ -460,8 +511,8 @@ a.reviews__badge:hover .reviews__link{text-decoration-color:currentColor}
 <div class="wrap">
 <div class="villages__intro">
 <h2 id="villages-title"><span>40+</span> villages. We know every one.</h2>
-<p>Gated or not. 55+ or all ages. Golf, lakes, trails and more. We help you find the few that fit your life.</p>
-<a class="btn" href="#get-started">Help Me Narrow It Down</a>
+<p data-swap data-sell="Gated or not. 55+ or all ages. Golf, lakes, trails and more. Each village draws a different buyer, and we know who is looking in yours.">Gated or not. 55+ or all ages. Golf, lakes, trails and more. We help you find the few that fit your life.</p>
+<a class="btn" href="#get-started" data-swap data-sell="Talk to a Listing Agent">Help Me Narrow It Down</a>
 </div>
 <ul class="village-list" aria-label="Lakewood Ranch villages and neighborhoods we cover">
 <li>Amber Creek</li>
@@ -519,17 +570,17 @@ a.reviews__badge:hover .reviews__link{text-decoration-color:currentColor}
 <section class="help section" aria-labelledby="help-title">
 <div class="wrap">
 <p class="eyebrow">How we help</p>
-<h2 class="h2" id="help-title">Lakewood Ranch is big. We make it simple.</h2>
+<h2 class="h2" id="help-title" data-swap data-sell="Selling here takes local knowledge. We have it.">Lakewood Ranch is big. We make it simple.</h2>
 <div class="cards">
 <article class="card">
 <img class="card__img" src="https://static.wixstatic.com/media/c2ba5f_226c6a709e984cb098bcafe6b53bdf0e~mv2.jpg/v1/fill/w_800,h_600,al_c,q_78,enc_auto/gated-home.jpg" width="800" height="600" loading="lazy" decoding="async" alt="A luxury home in The Lake Club, a gated village in Lakewood Ranch">
-<h3>Get behind the gates</h3>
-<p>Many Lakewood Ranch villages are gated. We set up showings so you can see homes in person, new or resale.</p>
+<h3 data-swap data-sell="Price it for your village">Get behind the gates</h3>
+<p data-swap data-sell="Values change from one village to the next. We price from what is selling around you, not from a county average.">Many Lakewood Ranch villages are gated. We set up showings so you can see homes in person, new or resale.</p>
 </article>
 <article class="card">
 <img class="card__img" src="https://static.wixstatic.com/media/d0be81_488d2c0301f241baad4b467648b62832~mv2.png/v1/crop/x_57,y_57,w_486,h_486/fill/w_800,h_600,al_c,q_80,enc_auto/village-aerial.jpg" width="800" height="600" loading="lazy" decoding="async" alt="Aerial view of a Lakewood Ranch village amenity center with pools">
-<h3>Narrow 40+ villages down to the best few</h3>
-<p>Tell us what matters to you. We match you to the villages that fit your budget, lifestyle and timeline.</p>
+<h3 data-swap data-sell="Show buyers the whole lifestyle">Narrow 40+ villages down to the best few</h3>
+<p data-swap data-sell="Buyers choose a village as much as a house. We present your home along with the amenities and community that come with it.">Tell us what matters to you. We match you to the villages that fit your budget, lifestyle and timeline.</p>
 </article>
 <article class="card">
 <div class="card__split">
@@ -542,8 +593,8 @@ a.reviews__badge:hover .reviews__link{text-decoration-color:currentColor}
 <figcaption class="tag">Buy</figcaption>
 </figure>
 </div>
-<h3>Compare your options side by side</h3>
-<p>Builder vs. builder. Building new vs. buying a home that was built recently. You get the full picture before you decide.</p>
+<h3 data-swap data-sell="Line up your next move">Compare your options side by side</h3>
+<p data-swap data-sell="Buying or building next? One team handles both, so you are not juggling two agents and two timelines.">Builder vs. builder. Building new vs. buying a home that was built recently. You get the full picture before you decide.</p>
 </article>
 </div>
 </div>
@@ -555,15 +606,15 @@ a.reviews__badge:hover .reviews__link{text-decoration-color:currentColor}
 <div class="wrap">
 <div class="final__copy">
 <p class="eyebrow eyebrow--sky">Your next step</p>
-<h2 id="final-title">Ready to Find Your Place in Lakewood Ranch?</h2>
-<p>Tell us what you're looking for. A local expert will reach out, usually the same day.</p>
+<h2 id="final-title" data-swap data-sell="Ready to Sell Your Lakewood Ranch Home?">Ready to Find Your Place in Lakewood Ranch?</h2>
+<p data-swap data-sell="Tell us about your home. A local expert will reach out, usually the same day.">Tell us what you're looking for. A local expert will reach out, usually the same day.</p>
 <p>Or call us at <a href="tel:+12148430130">(214) 843-0130</a></p>
 </div>
 
 <div class="form-card" id="get-started" data-form-card>
 <div data-form-body>
-<h2>Take the first step</h2>
-<p class="form-card__intro">We'll help you narrow things down.</p>
+<h2 data-swap data-sell="Thinking of selling?">Take the first step</h2>
+<p class="form-card__intro" data-swap data-sell="Tell us about your home and we'll be in touch.">We'll help you narrow things down.</p>
 <form class="lead-form" novalidate>
 <div class="field-row">
 <div class="field">
@@ -599,9 +650,9 @@ a.reviews__badge:hover .reviews__link{text-decoration-color:currentColor}
 </fieldset>
 <div class="field">
 <label for="b-message">Anything we should know? <span class="choice__hint">(optional)</span></label>
-<textarea id="b-message" name="message" rows="2" maxlength="1000" placeholder="e.g. Moving in the spring, want a pool, around $600k" data-field="message"></textarea>
+<textarea id="b-message" name="message" rows="2" maxlength="1000" placeholder="e.g. Moving in the spring, want a pool, around $600k" data-swap data-sell-placeholder="e.g. 4 bedrooms in Greenbrook, hoping to sell by summer" data-field="message"></textarea>
 </div>
-<button type="submit" class="btn">Ask a Lakewood Ranch Expert</button>
+<button type="submit" class="btn" data-swap data-sell="Talk to a Listing Agent">Ask a Lakewood Ranch Expert</button>
 <p class="error" data-error="send" role="alert" hidden></p>
 <p class="reassure">Free · No obligation · We usually reply the same day.</p>
 </form>
@@ -630,13 +681,16 @@ a.reviews__badge:hover .reviews__link{text-decoration-color:currentColor}
 </footer>
 
 <div class="sticky" data-sticky>
-<a class="btn" href="#lead-form">Ask a Lakewood Ranch Expert</a>
+<a class="btn" href="#lead-form" data-swap data-sell="Talk to a Listing Agent">Ask a Lakewood Ranch Expert</a>
 <a class="sticky__call" href="tel:+12148430130" aria-label="Call (214) 843-0130"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg></a>
 </div>
 
 <script>
 (function () {
   'use strict';
+
+  // Swap in the wording for ?v=build or ?v=sell across the whole page.
+  if (window.lwApplyVariant) window.lwApplyVariant();
 
   // Where leads are sent: app/api/lead/route.ts, which forwards them to Zapier.
   // Until ZAPIER_WEBHOOK_URL is set on the server it answers { test: true }.
@@ -780,6 +834,13 @@ a.reviews__badge:hover .reviews__link{text-decoration-color:currentColor}
       });
     });
 
+    // Seller ads: "Sell" starts picked (people can still change it).
+    if (window.LW_VARIANT === 'sell') {
+      choices.forEach(function (b) {
+        if (b.getAttribute('data-choice') === 'Sell') b.setAttribute('aria-pressed', 'true');
+      });
+    }
+
     maskPhone(form.querySelector('[data-field="phone"]'));
 
     ['first', 'last', 'phone', 'email'].forEach(function (key) {
@@ -852,7 +913,7 @@ a.reviews__badge:hover .reviews__link{text-decoration-color:currentColor}
   // Ads gets its conversion plus hashed contact details for enhanced
   // conversions, de-duplicated by the lead ID.
   var tags = window.LW_TAGS || { ads: {} };
-  var variant = /[?&]v=build/.test(window.location.search) ? 'build' : 'default';
+  var variant = window.LW_VARIANT || 'default';
   function trackLead(card, picked, who) {
     if (!tags.on || !window.gtag) return;
     gtag('event', 'generate_lead', {
